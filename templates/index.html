@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Click2Hear</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/plyr.css') }}"
+    />
+    <script src="{{ url_for('static', filename='js/plyr.js') }}"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body>
+    
+    <nav class="bg-gray-500" style="position: fixed; top: 0; width: 100%; z-index: 100;">
+      <div class="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
+        <div class="relative flex items-center justify-between h-16">
+          <div class="absolute inset-y-0 left-0 flex items-center">
+            <a href="/"
+              class="text-gray-300 hover:bg-gray-500 hover:text-white px-3 py-2 rounded-md text-md font-bold">Home</a>
+          </div>
+          <div class="absolute inset-y-0 right-0 flex items-center">
+            <a href="/SOP"
+              class="text-gray-300 hover:bg-gray-500 hover:text-white px-3 py-2 rounded-md text-md font-bold">SOP
+              Problems</a>
+            <a href="/2.5D"
+              class="text-gray-300 hover:bg-gray-500 hover:text-white px-3 py-2 rounded-md text-md font-bold">2.5D
+              Problems</a>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+
+    <div class="bg-gray-800 pt-20">
+
+      <h1 class="text-3xl font-bold text-center text-blue-100 mb-2">
+        Click2Hear: Interactive Spatial Audio Separation and Localization using
+        Visual Cues
+      </h1>
+      <div class="flex flex-col items-center text-gray-200">
+        <p class="text-lg">
+          <a href="https://avinash6.web.illinois.edu/">Avinash Subramaniam*</a>, <a href="https://debottam-dutta7.github.io/">Debottam Dutta*</a>, <a href="https://achaitanya.web.illinois.edu/">Chaitanya Amballa*</a>
+        </p>
+        <p class="text-lg">
+          Dept. of Electrical and Computer Engineering
+        </p>
+        <p class="text-lg">
+          <span class="font-bold">
+            University of Illinois at Urbana-Champaign
+          </span>
+        </p>
+        <p class="text-sm italic self-end mr-5">* = Equal contribution</p>
+      </div>
+    </div>
+
+    <div class="flex flex-col items-center justify-center">
+      <div class="max-w-5xl">
+      <div class="mt-8">
+        <h2 class="text-xl font-bold">Abstract:</h2>
+        <p class="mt-2 text-black">
+          In this paper, we present Click2Hear, an interactive spatial audio separation and localization system that utilizes
+          visual cues to improve audio separation and localization accuracy. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna
+          aliqua. Tellus in metus vulputate eu scelerisque felis imperdiet proin. Nec tincidunt praesent semper feugiat nibh sed
+          pulvinar. Faucibus a pellentesque sit amet porttitor eget dolor morbi non. Auctor eu augue ut lectus. A pellentesque sit
+          amet porttitor eget dolor morbi. Purus sit amet volutpat consequat mauris. Sed faucibus turpis in eu mi bibendum neque.
+          Dolor purus non enim praesent. Eget felis eget nunc lobortis mattis aliquam faucibus. Dolor morbi non arcu risus quis
+          varius quam quisque. Non blandit massa enim nec dui nunc mattis enim.
+          
+          Tincidunt id aliquet risus feugiat in ante metus dictum. Orci dapibus ultrices in iaculis. Orci dapibus ultrices in
+          iaculis nunc sed. Urna nunc id cursus metus aliquam eleifend mi in nulla. Pellentesque nec nam aliquam sem et. Dui id
+          ornare arcu odio. Nec tincidunt praesent semper feugiat nibh sed. Amet consectetur adipiscing elit ut aliquam purus.
+          Vitae aliquet nec ullamcorper sit amet risus nullam eget felis. Consequat mauris nunc congue nisi.
+          
+          Orci phasellus egestas tellus rutrum. In mollis nunc sed id semper risus in hendrerit. Sagittis id consectetur purus ut
+          faucibus pulvinar elementum. Ac turpis egestas maecenas pharetra convallis posuere morbi leo urna. Senectus et netus et
+          malesuada fames ac turpis egestas. Lacus vestibulum sed arcu non odio euismod lacinia at. Pharetra pharetra massa massa
+          ultricies. Faucibus in ornare quam viverra orci sagittis eu volutpat odio. Velit euismod in pellentesque massa placerat
+          duis ultricies lacus. Duis tristique sollicitudin nibh sit amet. Aliquam eleifend mi in nulla posuere sollicitudin
+          aliquam. Phasellus faucibus scelerisque eleifend donec pretium vulputate sapien.
+          
+        </p>
+      </div>
+      
+      <div class="mt-8">
+        <h2 class="text-xl font-bold">Demo:</h2>
+        <div class="flex flex-wrap mt-2">
+          <div class="w-full md:w-1/2 px-4">
+            <video id="video-player-1" controls crossorigin>
+              <source src="{{ url_for('static',
+                                        filename='videos/2.5d/000196/000196.mp4') }}" type="video/mp4">
+            </video>
+          </div>
+          <div class="w-full md:w-1/2 px-4">
+            <video controls crossorigin>
+              <source src="{{ url_for('static',
+                                          filename='videos/2.5d/000196/000196.mp4') }}" type="video/mp4">
+            </video>
+          </div>
+        </div>
+      </div>
+
+      <div class="mt-8">
+        <h2 class="text-xl font-bold">Resources:</h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-2 text-black">
+          <a href="https://github.com/click2hear"
+            class="bg-gray-400 hover:bg-gray-500 text-white font-bold py-2 px-4 rounded text-center">Link to code on GitHub</a>
+          <a href=""
+            class="bg-green-400 hover:bg-green-500 text-white font-bold py-2 px-4 rounded text-center">Link to research paper</a>
+          <a href=""
+            class="bg-yellow-400 hover:bg-yellow-500 text-white font-bold py-2 px-4 rounded text-center">Link to resource 3</a>
+        </div>
+      </div>
+      <div class="mt-8">
+        <h2 class="text-xl font-bold">References:</h2>
+        <ol class="mt-2 text-black">
+          <li>[insert reference 1 here]</li>
+          <li>[insert reference 2 here]</li>
+          <li>[insert reference 3 here]</li>
+        </ol>
+      </div>
+      <div class="mt-8">
+        <p class="text-black">&copy; 2023 Avinash Subramaniam, Chaitanya Amballa, Debottam Dutta. University of Illinois at
+          Urbana-Champaign. All rights reserved.</p>
+      </div>
+    </div>
+    </div>
+
+
+    <script src="https://unpkg.com/wavesurfer.js"></script>
+    <script src="https://unpkg.com/wavesurfer.js/dist/plugin/wavesurfer.spectrogram.min.js"></script>
+    <script>
+      createWaveformFromVideo('1', '/static/videos/sample.mp4');
+    </script>
+
+  </body>
+</html>

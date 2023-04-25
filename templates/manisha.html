@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Click2Hear</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/plyr.css') }}">
+    <script src="{{ url_for('static', filename='js/plyr.js') }}"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.15/tailwind.min.css">
+    <style>
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .video-container {
+            margin: 0 10px;
+            width: 50%;
+        }
+        .video-container:first-child {
+            margin-left: 0;
+        }
+        .video-container:last-child {
+            margin-right: 0;
+        }
+        .video-container video {
+            width: 100%;
+            height: auto;
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+    <div class="container">
+        <div class="video-container">
+            <video controls crossorigin playsinline class="js-player">
+                <source src="{{ url_for('static', filename='videos/sample.mp4') }}" type="video/mp4">
+            </video>
+        </div>
+        <div class="video-container">
+            <video controls crossorigin playsinline class="js-player">
+                <source src="{{ url_for('static', filename='videos/sample.mp4') }}" type="video/mp4">
+            </video>
+        </div>
+    </div>
+    <audio id="top-audio" src="{{ url_for('static', filename='videos/sample_top.mp3') }}"></audio>
+    <audio id="bottom-audio" src="{{ url_for('static', filename='videos/sample.mp3') }}"></audio>
+    <script>
+        const topVideo = document.querySelectorAll('.video-container')[1].querySelector('video');
+        const topAudio = document.querySelector('#top-audio');
+        const bottomAudio = document.querySelector('#bottom-audio');
+        
+        topVideo.addEventListener('click', (e) => {
+            const { offsetY } = e;
+            const { offsetHeight } = e.target;
+            if (offsetY < offsetHeight / 2) {
+                topAudio.currentTime = 0;
+                topAudio.play();
+            } else {
+                bottomAudio.currentTime = 0;
+                bottomAudio.play();
+            }
+        });
+
+        topVideo.addEventListener('pause', () => {
+            topAudio.pause();
+        });
+    </script>
+</body>
+</html>

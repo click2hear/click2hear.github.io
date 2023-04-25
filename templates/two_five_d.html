@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Click2Hear</title>
+        <link rel="stylesheet" href="{{ url_for('static',
+            filename='css/plyr.css') }}" />
+        <script type="text/javascript" src="{{ url_for('static', filename='js/plyr.js') }}"></script>
+        <script src="https://cdn.tailwindcss.com"></script>
+        <script src="https://cdn.plyr.io/3.7.8/plyr.js"></script>
+        <link rel="stylesheet"
+            href="https://unpkg.com/wavesurfer.js/dist/wavesurfer.min.css">
+        <script src="https://unpkg.com/wavesurfer.js/dist/wavesurfer.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/colormap@2.3.2/index.min.js"></script>
+    </head>
+
+    <body>
+        <nav class="bg-gray-500" style="position: fixed; top: 0; width: 100%; z-index: 100;">
+            <div class="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
+                <div class="relative flex items-center justify-between h-16">
+                    <div class="absolute inset-y-0 left-0 flex items-center">
+                        <a href="/"
+                            class="text-gray-300 hover:bg-gray-500 hover:text-white px-3 py-2 rounded-md text-md font-bold">Home</a>
+                    </div>
+                    <div class="absolute inset-y-0 right-0 flex items-center">
+                        <a href="/SOP"
+                            class="text-gray-300 hover:bg-gray-500 hover:text-white px-3 py-2 rounded-md text-md font-bold">SOP
+                            Problems</a>
+                        <a href="/2.5D"
+                            class="text-gray-300 hover:bg-gray-500 hover:text-white px-3 py-2 rounded-md text-md font-bold">2.5D
+                            Problems</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+        
+        <div class="max-w-screen-lg mx-auto py-4" style="z-index: 0;">
+            <h1 class="text-3xl font-bold mb-10 mt-10 text-center">Problems with
+                2.5D</h1>
+            <h2 class="text-3xl font-bold text-center">Video</h2>
+            <div class="relative mb-10">
+                <div id="video-player">
+                    <video controls crossorigin>
+                        <source src="{{ url_for('static',
+                            filename='videos/2.5d/000196/000196.mp4') }}"
+                            type="video/mp4">
+                    </video>
+                </div>
+            </div>
+            <h2 class="text-3xl font-bold text-center">Audio</h2>
+            <div class="grid grid-cols-3 gap-10 mb-20">
+                <div class="relative">
+                    <audio id="audio-player-1" class="w-full mb-2" controls>
+                        <source src="{{ url_for('static',
+                            filename='videos/2.5d/000196/input_binaural.wav')
+                            }}" type="audio/wav">
+                    </audio>
+                    <div id="waveform-1"></div>
+                    <div id="spectrogram-1"></div>
+                    <div class="text-center">
+                        <span class="font-bold block">Input Binaural</span>
+                    </div>
+                </div>
+                <div class="relative">
+                    <audio id="audio-player-2" class="w-full mb-2" controls>
+                        <source src="{{ url_for('static',
+                            filename='videos/2.5d/000196/mixed_mono.wav') }}"
+                            type="audio/wav">
+                    </audio>
+                    <div id="waveform-2"></div>
+                    <div id="spectrogram-2"></div>
+                    <div class="text-center">
+                        <span class="font-bold">Mixed Mono</span>
+                    </div>
+                </div>
+                <div class="relative">
+                    <audio id="audio-player-3" class="w-full mb-2" controls>
+                        <source src="{{ url_for('static',
+                            filename='videos/2.5d/000196/predicted_binaural.wav')
+                            }}" type="audio/wav">
+                    </audio>
+                    <div id="waveform-3"></div>
+                    <div id="spectrogram-3"></div>
+                    <div class="text-center">
+                        <span class="font-bold">Predicted Binaural</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-3 gap-10 mb-20">
+                <div class="relative">
+                    <audio id="audio-player-4" class="w-full mb-2" controls>
+                        <source src="{{ url_for('static',
+                            filename='videos/2.5d/000196/onlyleft_input_binaural.wav')
+                            }}" type="audio/wav">
+                    </audio>
+                    <div id="waveform-4"></div>
+                    <div id="spectrogram-4"></div>
+                    <div class="text-center">
+                        <span class="font-bold block">Only Left Input Binaural</span>
+                    </div>
+                </div>
+                <div class="relative">
+                    <audio id="audio-player-5" class="w-full mb-2" controls>
+                        <source src="{{ url_for('static',
+                            filename='videos/2.5d/000196/onlyleft_mixed_mono.wav')
+                            }}" type="audio/wav">
+                    </audio>
+                    <div id="waveform-5"></div>
+                    <div id="spectrogram-5"></div>
+                    <div class="text-center">
+                        <span class="font-bold">Only Left Mixed Mono</span>
+                    </div>
+                </div>
+                <div class="relative">
+                    <audio id="audio-player-6" class="w-full mb-2" controls>
+                        <source src="{{ url_for('static',
+                            filename='videos/2.5d/000196/onlyleft_predicted_binaural.wav')
+                            }}" type="audio/wav">
+                    </audio>
+                    <div id="waveform-6"></div>
+                    <div id="spectrogram-6"></div>
+                    <div class="text-center">
+                        <span class="font-bold">Only Left Predicted Binaural</span>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="grid grid-cols-3 gap-10">
+                <div class="relative">
+                    <audio id="audio-player-7" class="w-full mb-2" controls>
+                        <source src="{{ url_for('static',
+                            filename='videos/2.5d/000196/onlyright_input_binaural.wav')
+                            }}" type="audio/wav">
+                    </audio>
+                    <div id="waveform-7"></div>
+                    <div id="spectrogram-7"></div>
+                    <div class="text-center">
+                        <span class="font-bold block">Only Right Input Binaural</span>
+                    </div>
+                </div>
+                <div class="relative">
+                    <audio id="audio-player-8" class="w-full mb-2" controls>
+                        <source src="{{ url_for('static',
+                            filename='videos/2.5d/000196/onlyright_mixed_mono.wav')
+                            }}" type="audio/wav">
+                    </audio>
+                    <div id="waveform-8"></div>
+                    <div id="spectrogram-8"></div>
+                    <div class="text-center">
+                        <span class="font-bold">Only Right Mixed Mono</span>
+                    </div>
+                </div>
+                <div class="relative">
+                    <audio id="audio-player-9" class="w-full mb-2" controls>
+                        <source src="{{ url_for('static',
+                            filename='videos/2.5d/000196/onlyright_predicted_binaural.wav')
+                            }}" type="audio/wav">
+                    </audio>
+                    <div id="waveform-9"></div>
+                    <div id="spectrogram-9"></div>
+                    <div class="text-center">
+                        <span class="font-bold">Only Right Predicted Binaural</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+            <script src="https://unpkg.com/wavesurfer.js"></script>
+            <script src="https://unpkg.com/wavesurfer.js/dist/plugin/wavesurfer.spectrogram.min.js"></script>
+            <script>
+                createWaveformAndSpectrogram('1', '/static/videos/2.5d/000196/input_binaural.wav');
+                createWaveformAndSpectrogram('2', '/static/videos/2.5d/000196/mixed_mono.wav');
+                createWaveformAndSpectrogram('3', '/static/videos/2.5d/000196/predicted_binaural.wav');
+                createWaveformAndSpectrogram('4', '/static/videos/2.5d/000196/onlyleft_input_binaural.wav');
+                createWaveformAndSpectrogram('5', '/static/videos/2.5d/000196/onlyleft_mixed_mono.wav');
+                createWaveformAndSpectrogram('6', '/static/videos/2.5d/000196/onlyleft_predicted_binaural.wav');
+                createWaveformAndSpectrogram('7', '/static/videos/2.5d/000196/onlyright_input_binaural.wav');
+                createWaveformAndSpectrogram('8', '/static/videos/2.5d/000196/onlyright_mixed_mono.wav');
+                createWaveformAndSpectrogram('9', '/static/videos/2.5d/000196/onlyright_predicted_binaural.wav');
+
+            </script>
+            
+    </body>
+
+    </html>

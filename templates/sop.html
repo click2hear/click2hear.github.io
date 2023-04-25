@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Click2Hear</title>
+        <link rel="stylesheet" href="{{ url_for('static',
+            filename='css/plyr.css') }}" />
+        <script type="text/javascript" src="{{ url_for('static', filename='js/plyr.js') }}"></script>
+        <script src="https://cdn.tailwindcss.com"></script>
+        <script src="https://cdn.plyr.io/3.7.8/plyr.js"></script>
+        <link rel="stylesheet"
+            href="https://unpkg.com/wavesurfer.js/dist/wavesurfer.min.css">
+        <script src="https://unpkg.com/wavesurfer.js/dist/wavesurfer.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/colormap@2.3.2/index.min.js"></script>
+    </head>
+
+    <body>
+        <nav class="bg-gray-500" style="position: fixed; top: 0; width: 100%; z-index: 100;">
+            <div class="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
+                <div class="relative flex items-center justify-between h-16">
+                    <div class="absolute inset-y-0 left-0 flex items-center">
+                        <a href="/"
+                            class="text-gray-300 hover:bg-gray-500 hover:text-white px-3 py-2 rounded-md text-md font-bold">Home</a>
+                    </div>
+                    <div class="absolute inset-y-0 right-0 flex items-center">
+                        <a href="/SOP"
+                            class="text-gray-300 hover:bg-gray-500 hover:text-white px-3 py-2 rounded-md text-md font-bold">SOP
+                            Problems</a>
+                        <a href="/2.5D"
+                            class="text-gray-300 hover:bg-gray-500 hover:text-white px-3 py-2 rounded-md text-md font-bold">2.5D
+                            Problems</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+        
+        
+            
+    </body>
+
+    </html>
