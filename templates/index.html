@@ -7,10 +7,13 @@
     <title>Click2Hear</title>
     <link
       rel="stylesheet"
-      href="{{ url_for('static', filename='css/plyr.css') }}"
+      href="{{ url_for('static', filename='css/style.css') }}"
     />
-    <script src="{{ url_for('static', filename='js/plyr.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/plyr.js') }}"></script>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.plyr.io/3.7.8/plyr.js"></script>
+    <!-- <link rel="stylesheet" href="https://unpkg.com/wavesurfer.js/dist/wavesurfer.min.css"> -->
+    <script src="https://unpkg.com/wavesurfer.js/dist/wavesurfer.min.js"></script>
   </head>
   <body>
     
@@ -61,43 +64,33 @@
       <div class="mt-8">
         <h2 class="text-xl font-bold">Abstract:</h2>
         <p class="mt-2 text-black">
-          In this paper, we present Click2Hear, an interactive spatial audio separation and localization system that utilizes
-          visual cues to improve audio separation and localization accuracy. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna
-          aliqua. Tellus in metus vulputate eu scelerisque felis imperdiet proin. Nec tincidunt praesent semper feugiat nibh sed
-          pulvinar. Faucibus a pellentesque sit amet porttitor eget dolor morbi non. Auctor eu augue ut lectus. A pellentesque sit
-          amet porttitor eget dolor morbi. Purus sit amet volutpat consequat mauris. Sed faucibus turpis in eu mi bibendum neque.
-          Dolor purus non enim praesent. Eget felis eget nunc lobortis mattis aliquam faucibus. Dolor morbi non arcu risus quis
-          varius quam quisque. Non blandit massa enim nec dui nunc mattis enim.
-          
-          Tincidunt id aliquet risus feugiat in ante metus dictum. Orci dapibus ultrices in iaculis. Orci dapibus ultrices in
-          iaculis nunc sed. Urna nunc id cursus metus aliquam eleifend mi in nulla. Pellentesque nec nam aliquam sem et. Dui id
-          ornare arcu odio. Nec tincidunt praesent semper feugiat nibh sed. Amet consectetur adipiscing elit ut aliquam purus.
-          Vitae aliquet nec ullamcorper sit amet risus nullam eget felis. Consequat mauris nunc congue nisi.
-          
-          Orci phasellus egestas tellus rutrum. In mollis nunc sed id semper risus in hendrerit. Sagittis id consectetur purus ut
-          faucibus pulvinar elementum. Ac turpis egestas maecenas pharetra convallis posuere morbi leo urna. Senectus et netus et
-          malesuada fames ac turpis egestas. Lacus vestibulum sed arcu non odio euismod lacinia at. Pharetra pharetra massa massa
-          ultricies. Faucibus in ornare quam viverra orci sagittis eu volutpat odio. Velit euismod in pellentesque massa placerat
-          duis ultricies lacus. Duis tristique sollicitudin nibh sit amet. Aliquam eleifend mi in nulla posuere sollicitudin
-          aliquam. Phasellus faucibus scelerisque eleifend donec pretium vulputate sapien.
-          
+          We present Click2Hear, an interactive system that utilizes visual cues to perform spatial audio separation and localization. Audio source seperation (also known as cocktail party problem) is a well studied problem in the field of audio signal processing. 
+          However, most of the existing methods either require the number of sources be known beforehand or only work for a relatively small number of sources. In most of the real world scenarios, humans can also have a sense of localizing the sound with the help of visual information they capture.
+          This visial information helps in both seperating and localizing sources at the same time. 
+          In addition to helping with audio source separation, 
+          visual information aslo can give a sense of the spatial location of the audio source. 
+          Existing methods (cite SOP and 2.5D) deal with the problem of audio source separation and localization separately or require sequential processing to do both the tasks. 
+          In this work, we propose a novel method to use visual cues to perform both audio source separation and localization both at the same time. We introduce a new framework '
+          We finally evaluate our proposed method on the FAIR-Play dataset and show that our method outperforms the state-of-the-art methods both qualitatively and quantitatively.
         </p>
       </div>
       
       <div class="mt-8">
-        <h2 class="text-xl font-bold">Demo:</h2>
+        <h2 class="text-xl font-bold mb-5">Demo:</h2>
         <div class="flex flex-wrap mt-2">
           <div class="w-full md:w-1/2 px-4">
-            <video id="video-player-1" controls crossorigin>
+            <video id="video-player-1" crossorigin>
               <source src="{{ url_for('static',
                                         filename='videos/2.5d/000196/000196.mp4') }}" type="video/mp4">
             </video>
+            <div id="waveform-original-1"></div>
           </div>
           <div class="w-full md:w-1/2 px-4">
-            <video controls crossorigin>
+            <video id="video-player-2" crossorigin>
               <source src="{{ url_for('static',
                                           filename='videos/2.5d/000196/000196.mp4') }}" type="video/mp4">
             </video>
+            <div id="waveform-original-2"></div>
           </div>
         </div>
       </div>
@@ -132,8 +125,71 @@
     <script src="https://unpkg.com/wavesurfer.js"></script>
     <script src="https://unpkg.com/wavesurfer.js/dist/plugin/wavesurfer.spectrogram.min.js"></script>
     <script>
-      createWaveformFromVideo('1', '/static/videos/sample.mp4');
+      // createWaveformAndSpectrogramForVideo("1", "/static/videos/sample.mp4");
+      createWaveformForVideo("1", "/static/videos/2.5d/000196/000196.mp4");
+      createWaveformForVideo("2", "/static/videos/sample.mp4");
+      // createWaveformAndSpectrogramForVideo('1', '/static/videos/2.5d/000196/mixed_mono.wav');
+      // createWaveformAndSpectrogramForVideo('2', '/static/videos/2.5d/000196/mixed_mono.wav');
+        // createWaveformAndSpectrogram('original-1', '/static/videos/2.5d/000196/mixed_mono.wav');
+        // createWaveformAndSpectrogram('original-2', '/static/videos/2.5d/000196/mixed_mono.wav');
+        // Create WaveSurfer instance with MediaElement backend
+          // var wavesurfer = WaveSurfer.create({
+          //   container: document.querySelector('#waveform-original-1'),
+          //   waveColor: '#A8DBA8',
+          //   progressColor: '#3B8686',
+          //   backend: 'MediaElement'
+          // });
+
+          // // Load audio from existing video element
+          // var videoElt = document.querySelector('#video-player-1');
+          // wavesurfer.load(videoElt);
+
+          // // Create another WaveSurfer instance with MediaElement backend
+          //   var wavesurfer2 = WaveSurfer.create({
+          //     container: document.querySelector('#waveform-original-2'),
+          //     waveColor: '#A8DBA8',
+          //     progressColor: '#3B8686',
+          //     backend: 'MediaElement'
+          //   });
+
+          //   // Load audio from another existing video element
+          //   var videoElt2 = document.querySelector('#video-player-2');
+          //   wavesurfer2.load(videoElt2);
     </script>
+    
+    <script>
+      const video1 = document.getElementById('video-player-1');
+      video1.muted = true;
+        let isPlaying = false;
+
+        video1.addEventListener('click', () => {
+          if (isPlaying) {
+            video1.pause();
+            isPlaying = false;
+          } else {
+            video1.play();
+            isPlaying = true;
+          }
+        });
+
+        const video2 = document.getElementById('video-player-2');
+        video2.muted = true;
+        let isPlaying2 = false;
+
+        video2.addEventListener('click', () => {
+          if (isPlaying2) {
+            video2.pause();
+            isPlaying2 = false;
+          } else {
+            video2.play();
+            isPlaying2 = true;
+          }
+          const x = event.offsetX;
+          const y = event.offsetY;
+          console.log(`Clicked on pixel (${x}, ${y})`);
+        });
+    </script>
+
 
   </body>
 </html>

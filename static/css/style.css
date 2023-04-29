@@ -10,3 +10,18 @@
     height: auto;
     max-height: calc(100vh - 100px);
 }
+
+
+video:hover {
+    cursor: pointer;
+}
+
+/* Hide the scrollbar */
+::-webkit-scrollbar {
+    display: none;
+}
+
+/* Add padding to the right of the page to accommodate for the scrollbar
+body {
+    padding-right: 20px;
+} */

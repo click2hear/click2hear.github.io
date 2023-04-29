@@ -9,8 +9,10 @@ function createWaveformAndSpectrogram(
 ) {
   const wavesurfer = WaveSurfer.create({
     container: `#waveform-${playerId}`,
-    waveColor: "#343",
-    progressColor: "#333",
+    waveColor: "#5FDDC8",
+    progressColor: "#178A77",
+    barWidth: 2,
+    height: 100,
     plugins: showSpectrogram
       ? [
           WaveSurfer.spectrogram.create({
@@ -57,16 +59,47 @@ function createWaveformAndSpectrogram(
   });
 }
 
-function createWaveformFromVideo(playerId, fileUrl) {
-  var wavesurfer = WaveSurfer.create({
-    container: document.querySelector("#video-player-1"),
-    waveColor: "#A8DBA8",
-    progressColor: "#3B8686",
-    backend: "MediaElement",
+function createWaveformForVideo(playerId, fileUrl) {
+  const wavesurfer = WaveSurfer.create({
+    container: `#waveform-original-${playerId}`,
+    waveColor: "#5FDDC8",
+    progressColor: "#178A77",
+    barWidth: 2,
+    height: 100,
+    // backend: "MediaElement",
+  });
+  wavesurfer.load(fileUrl);
+
+  const videoPlayer = document.querySelector(`#video-player-${playerId}`);
+  videoPlayer.addEventListener("play", () => {
+    wavesurfer.play();
+  });
+  videoPlayer.addEventListener("pause", () => {
+    wavesurfer.pause();
   });
 
-  // Load audio from existing media element
-  //   var mediaElt = document.querySelector("video");
+  let isWaveformClicked = false;
+  videoPlayer.addEventListener("timeupdate", () => {
+    const currentTime = videoPlayer.currentTime;
+    const duration = videoPlayer.duration;
+    const progressPercentage = currentTime / duration;
+    if (!isWaveformClicked) {
+      wavesurfer.seekTo(progressPercentage);
+    }
+  });
 
-  wavesurfer.load(fileUrl);
+  wavesurfer.on("seek", (position) => {
+    if (isWaveformClicked) {
+      videoPlayer.currentTime = position * videoPlayer.duration;
+    }
+    isWaveformClicked = false;
+  });
+
+  wavesurfer.on("ready", () => {
+    const waveform = wavesurfer.drawer.container;
+
+    waveform.addEventListener("mousedown", () => {
+      isWaveformClicked = true;
+    });
+  });
 }
