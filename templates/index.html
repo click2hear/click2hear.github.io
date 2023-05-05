@@ -60,39 +60,146 @@
     </div>
 
     <div class="flex flex-col items-center justify-center">
-      <div class="max-w-5xl">
+      <div class="max-w-6xl">
       <div class="mt-8">
         <h2 class="text-xl font-bold">Abstract:</h2>
         <p class="mt-2 text-black">
-          We present Click2Hear, an interactive system that utilizes visual cues to perform spatial audio separation and localization. Audio source seperation (also known as cocktail party problem) is a well studied problem in the field of audio signal processing. 
-          However, most of the existing methods either require the number of sources be known beforehand or only work for a relatively small number of sources. In most of the real world scenarios, humans can also have a sense of localizing the sound with the help of visual information they capture.
-          This visial information helps in both seperating and localizing sources at the same time. 
-          In addition to helping with audio source separation, 
-          visual information aslo can give a sense of the spatial location of the audio source. 
-          Existing methods (cite SOP and 2.5D) deal with the problem of audio source separation and localization separately or require sequential processing to do both the tasks. 
-          In this work, we propose a novel method to use visual cues to perform both audio source separation and localization both at the same time. We introduce a new framework '
-          We finally evaluate our proposed method on the FAIR-Play dataset and show that our method outperforms the state-of-the-art methods both qualitatively and quantitatively.
+          We present Click2Hear, an interactive system that utilizes visual cues to generate binaural audio from a video with mono
+          audio and at the same time performs spatial audio separation and sound source localization.
+          We present Click2Hear, an interactive system that utilizes visual cues to generate binaural audio from a video with mono
+          audio and at the same time performs spatial audio separation and sound source localization.
+          Mono audios lack spatial information in itself to localize or separate sources without any external information such as
+          speaker identity and visual cues. Without any speaker or prior source information, most of the existing methods utilize
+          visual information present in the video frames to achieve these tasks.
+          These methods take inspiration from the real world that, humans also have a sense of localizing the sound with the help
+          of visual information they capture. This visual information helps in both separating and localizing sources at the same
+          time. In addition to helping with audio source separation, visual information also can give a sense of the spatial
+          location of the audio source.
+          Existing audio-visual methods attempt these tasks separately or require sequential processing to do both tasks. We
+          investigate the generalizability of a popular existing method in localizing and separating mono sound mixtures to more
+          realistic scenarios by conducting several experiments. Then, we propose a unified framework that does both of the
+          aforementioned tasks with the additional task of binauralization in one shot. Our experiments show promising results
+          towards achieving this task.
         </p>
       </div>
+
+
+      <div class="my-8">
+        <div class="w-full">
+          <h2 class="text-xl font-bold mb-5 ml-2">Proposed Architecture:</h2>
+            <img class="mx-auto" src="/static/files/arch.jpg" alt="Neural Net Architecture">
+        </div>
+      </div>
+
+
+
       
+      <!-- SOP on MUSIC -->
       <div class="mt-8">
         <h2 class="text-xl font-bold mb-5">Demo:</h2>
+        <h2 class="text-xl text-center text-gray-500 font-bold mb-5 ">SOP on MUSIC</h2>
         <div class="flex flex-wrap mt-2">
           <div class="w-full md:w-1/2 px-4">
-            <video id="video-player-1" crossorigin>
+            <h3 class="text-lg text-center font-bold">Original</h3>
+            <p class="text-center font-bold text-red-800">Click on the video to play/pause the correspoding audio associated with it. You can change time by clicking on the waveform</p>
+            <video id="video-player-1" width="640" height="160"  crossorigin>
               <source src="{{ url_for('static',
-                                        filename='videos/2.5d/000196/000196.mp4') }}" type="video/mp4">
+                                        filename='files/guitar+violin/small.mp4') }}" type="video/mp4">
             </video>
             <div id="waveform-original-1"></div>
           </div>
           <div class="w-full md:w-1/2 px-4">
-            <video id="video-player-2" crossorigin>
+            <h3 class="text-lg text-center font-bold">Pixelwise Audio</h3>
+            <p class="text-center font-bold text-red-800">Click on any pixel to play the correspoding audio associated with
+              it. You can change time by clicking on the waveform</p>
+            <video id="video-player-2"  width="640" height="160" crossorigin> 
               <source src="{{ url_for('static',
-                                          filename='videos/2.5d/000196/000196.mp4') }}" type="video/mp4">
+                                          filename='files/guitar+violin/small.mp4') }}" type="video/mp4">
             </video>
             <div id="waveform-original-2"></div>
+            <div id="highlight"></div>
           </div>
         </div>
+
+
+        <!-- SOP on Fairplay -->
+        <h2 class="text-xl text-center text-gray-500 font-bold mb-5 ">SiSLoc (on FAIR-Play)</h2>
+        <div class="flex flex-wrap mt-2">
+          <div class="w-full md:w-1/2 px-4">
+            <h3 class="text-lg text-center font-bold">Original</h3>
+            <p class="text-center font-bold text-red-800">Click on the video to play/pause the correspoding audio associated
+              with it. You can change time by clicking on the waveform</p>
+            <video id="video-player-3" width="640" height="160" crossorigin>
+              <source src="{{ url_for('static',
+                                                filename='files/001471/small.mp4') }}" type="video/mp4">
+            </video>
+            <div id="waveform-original-3"></div>
+          </div>
+          <div class="w-full md:w-1/2 px-4">
+            <h3 class="text-lg text-center font-bold">Pixelwise Audio</h3>
+            <p class="text-center font-bold text-red-800">Click on any pixel to play the correspoding audio associated with
+              it. You can change time by clicking on the waveform</p>
+            <video id="video-player-4" width="640" height="160" crossorigin>
+              <source src="{{ url_for('static',
+                                                  filename='files/001471/small.mp4') }}" type="video/mp4">
+            </video>
+            <div id="waveform-original-4"></div>
+            <div id="highlight"></div>
+          </div>
+        </div>
+
+        <!-- Mono to Binaural -->
+        <h2 class="text-xl text-center text-gray-500 font-bold mb-5 ">Mono2Binaural</h2>
+        <div class="flex flex-wrap mt-2">
+          <div class="w-full md:w-1/2 px-4">
+            <h3 class="text-lg text-center font-bold">Mono Audio</h3>
+            <p class="text-center font-bold text-red-800">Click on the video to play/pause the correspoding audio associated
+              with it. You can change time by clicking on the waveform</p>
+            <video id="video-player-5" width="640" height="160" crossorigin>
+              <source src="{{ url_for('static',
+                                                        filename='files/mono2binaural/original.mp4') }}" type="video/mp4">
+            </video>
+            <div id="waveform-original-5"></div>
+          </div>
+          <div class="w-full md:w-1/2 px-4">
+            <h3 class="text-lg text-center font-bold">Predicted Binaural Audio</h3>
+            <p class="text-center font-bold text-red-800">Click on the video to play/pause the correspoding audio associated
+            with it. You can change time by clicking on the waveform</p>
+            <video id="video-player-6" width="640" height="160" crossorigin>
+              <source src="{{ url_for('static',
+                                                          filename='files/mono2binaural/original.mp4') }}" type="video/mp4">
+            </video>
+            <div id="waveform-original-6"></div>
+            <div id="highlight"></div>
+          </div>
+        </div>
+
+        <!-- Our method -->
+        <h2 class="text-xl text-center text-gray-500 font-bold mb-5 ">SiBSLoc</h2>
+        <div class="flex flex-wrap mt-2">
+          <div class="w-full md:w-1/2 px-4">
+            <h3 class="text-lg text-center font-bold">Original</h3>
+            <p class="text-center font-bold text-red-800">Click on the video to play/pause the correspoding audio associated
+              with it. You can change time by clicking on the waveform</p>
+            <video id="video-player-7" width="640" height="160" crossorigin>
+              <source src="{{ url_for('static',
+                                                                filename='files/001851/original.mp4') }}" type="video/mp4">
+            </video>
+            <div id="waveform-original-7"></div>
+          </div>
+          <div class="w-full md:w-1/2 px-4">
+            <h3 class="text-lg text-center font-bold">Pixelwise Seperated + Binaural</h3>
+            <p class="text-center font-bold text-red-800">Click on any pixel to play the correspoding audio associated with
+              it. You can change time by clicking on the waveform</p>
+            <video id="video-player-8" width="640" height="160" crossorigin>
+              <source src="{{ url_for('static',
+                                                                  filename='files/001851/original.mp4') }}" type="video/mp4">
+            </video>
+            <div id="waveform-original-8"></div>
+            <div id="highlight"></div>
+          </div>
+        </div>
+
       </div>
 
       <div class="mt-8">
@@ -108,14 +215,24 @@
       </div>
       <div class="mt-8">
         <h2 class="text-xl font-bold">References:</h2>
-        <ol class="mt-2 text-black">
-          <li>[insert reference 1 here]</li>
-          <li>[insert reference 2 here]</li>
-          <li>[insert reference 3 here]</li>
+        <ol class="mt-2 text-black list-decimal pl-5">
+          <li>
+            <a href="https://arxiv.org/abs/1804.03160" class="text-blue-600 hover:text-blue-800 font-bold">The Sound of
+              Pixels</a>
+            <br>
+            Hang Zhao, Chuang Gan, Andrew Rouditchenko, Carl Vondrick, Josh McDermott, Antonio Torralba
+          </li>
+          <li class="mt-4">
+            <a href="http://www.cs.utexas.edu/~grauman/papers/CVPR19_2.5d-visual-sound.pdf"
+              class="text-blue-600 hover:text-blue-800 font-bold">2.5D Visual Sound</a>
+            <br>
+            Ruohan Gao, Kristen Grauman
+          </li>
         </ol>
       </div>
+
       <div class="mt-8">
-        <p class="text-black">&copy; 2023 Avinash Subramaniam, Chaitanya Amballa, Debottam Dutta. University of Illinois at
+        <p class="text-black text-center">&copy; 2023 Avinash Subramaniam, Debottam Dutta, Chaitanya Amballa. University of Illinois at
           Urbana-Champaign. All rights reserved.</p>
       </div>
     </div>
@@ -125,69 +242,31 @@
     <script src="https://unpkg.com/wavesurfer.js"></script>
     <script src="https://unpkg.com/wavesurfer.js/dist/plugin/wavesurfer.spectrogram.min.js"></script>
     <script>
-      // createWaveformAndSpectrogramForVideo("1", "/static/videos/sample.mp4");
-      createWaveformForVideo("1", "/static/videos/2.5d/000196/000196.mp4");
-      createWaveformForVideo("2", "/static/videos/sample.mp4");
-      // createWaveformAndSpectrogramForVideo('1', '/static/videos/2.5d/000196/mixed_mono.wav');
-      // createWaveformAndSpectrogramForVideo('2', '/static/videos/2.5d/000196/mixed_mono.wav');
-        // createWaveformAndSpectrogram('original-1', '/static/videos/2.5d/000196/mixed_mono.wav');
-        // createWaveformAndSpectrogram('original-2', '/static/videos/2.5d/000196/mixed_mono.wav');
-        // Create WaveSurfer instance with MediaElement backend
-          // var wavesurfer = WaveSurfer.create({
-          //   container: document.querySelector('#waveform-original-1'),
-          //   waveColor: '#A8DBA8',
-          //   progressColor: '#3B8686',
-          //   backend: 'MediaElement'
-          // });
-
-          // // Load audio from existing video element
-          // var videoElt = document.querySelector('#video-player-1');
-          // wavesurfer.load(videoElt);
-
-          // // Create another WaveSurfer instance with MediaElement backend
-          //   var wavesurfer2 = WaveSurfer.create({
-          //     container: document.querySelector('#waveform-original-2'),
-          //     waveColor: '#A8DBA8',
-          //     progressColor: '#3B8686',
-          //     backend: 'MediaElement'
-          //   });
-
-          //   // Load audio from another existing video element
-          //   var videoElt2 = document.querySelector('#video-player-2');
-          //   wavesurfer2.load(videoElt2);
+      createWaveformForVideo("1", "static/files/guitar+violin/wav/small.wav");
     </script>
-    
     <script>
-      const video1 = document.getElementById('video-player-1');
-      video1.muted = true;
-        let isPlaying = false;
-
-        video1.addEventListener('click', () => {
-          if (isPlaying) {
-            video1.pause();
-            isPlaying = false;
-          } else {
-            video1.play();
-            isPlaying = true;
-          }
-        });
-
-        const video2 = document.getElementById('video-player-2');
-        video2.muted = true;
-        let isPlaying2 = false;
-
-        video2.addEventListener('click', () => {
-          if (isPlaying2) {
-            video2.pause();
-            isPlaying2 = false;
-          } else {
-            video2.play();
-            isPlaying2 = true;
-          }
-          const x = event.offsetX;
-          const y = event.offsetY;
-          console.log(`Clicked on pixel (${x}, ${y})`);
-        });
+        createWaveformForVideo("3", "static/files/001471/wav/small.wav");
+    </script>
+    <script>
+      createWaveformForVideo("5", "static/files/mono2binaural/wav/mixed_mono_converted.wav");
+    </script>
+    <script>
+      createWaveformForVideo("7", "static/files/001851/wav/original.wav");
+    </script>
+    <script>
+        let wavesurfer_2 = null;
+        interactiveDemo('2', 'guitar+violin', 14, wavesurfer_2);
+    </script>
+    <script>
+      let wavesurfer_4 = null;
+      interactiveDemo('4', '001471', 14, wavesurfer_4);
+    </script>
+    <script>
+        createWaveformForVideo("6", "static/files/mono2binaural/wav/predicted_binaural_converted.wav");
+    </script>
+    <script>
+      let wavesurfer_8 = null;
+      interactiveDemo('8', '001851', 14, wavesurfer_8);
     </script>
 
 

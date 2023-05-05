@@ -72,13 +72,27 @@ function createWaveformForVideo(playerId, fileUrl) {
 
   let isWaveformClicked = false;
 
+  let isPlaying = false;
+
   wavesurfer.on("ready", function () {
     const videoPlayer = document.querySelector(`#video-player-${playerId}`);
+    videoPlayer.muted = true;
+
     videoPlayer.addEventListener("play", () => {
       wavesurfer.play();
     });
     videoPlayer.addEventListener("pause", () => {
       wavesurfer.pause();
+    });
+
+    videoPlayer.addEventListener("click", () => {
+      if (isPlaying) {
+        videoPlayer.pause();
+        isPlaying = false;
+      } else {
+        videoPlayer.play();
+        isPlaying = true;
+      }
     });
 
     wavesurfer.on("seek", (position) => {
@@ -107,51 +121,50 @@ function createWaveformForVideo(playerId, fileUrl) {
   });
 }
 
-let wavesurfer = null;
-function playDemo(playerId, audio_folder, x, y) {
-  if (!wavesurfer) {
-    wavesurfer = WaveSurfer.create({
-      container: `#waveform-original-${playerId}`,
-      waveColor: "blue",
-      progressColor: "green",
-      barWidth: 2,
-      height: 200,
-      backend: "WebAudio",
-    });
-  }
+// function playDemo(playerId, audio_folder, x, y) {
+//   if (!wavesurfer) {
+//     wavesurfer = WaveSurfer.create({
+//       container: `#waveform-original-${playerId}`,
+//       waveColor: "blue",
+//       progressColor: "green",
+//       barWidth: 2,
+//       height: 200,
+//       backend: "WebAudio",
+//     });
+//   }
 
-  let isWaveformClicked = false;
-  const base_path = "static/files/";
-  wave_file = `${base_path}${audio_folder}/wav/${x}_${y}.wav`;
+//   let isWaveformClicked = false;
+//   const base_path = "static/files/";
+//   wave_file = `${base_path}${audio_folder}/wav/${x}_${y}.wav`;
 
-  wavesurfer.empty();
-  wavesurfer.load(wave_file);
-  wavesurfer.on("ready", function () {
-    const videoPlayer = document.querySelector(`#video-player-${playerId}`);
-    videoPlayer.currentTime = 0;
-    videoPlayer.play();
-    wavesurfer.play();
-    // videoPlayer.addEventListener("play", () => {
-    //   wavesurfer.play();
-    // });
-    // videoPlayer.addEventListener("pause", () => {
-    //   wavesurfer.pause();
-    // });
+//   wavesurfer.empty();
+//   wavesurfer.load(wave_file);
+//   wavesurfer.on("ready", function () {
+//     const videoPlayer = document.querySelector(`#video-player-${playerId}`);
+//     videoPlayer.currentTime = 0;
+//     videoPlayer.play();
+//     wavesurfer.play();
+//     // videoPlayer.addEventListener("play", () => {
+//     //   wavesurfer.play();
+//     // });
+//     // videoPlayer.addEventListener("pause", () => {
+//     //   wavesurfer.pause();
+//     // });
 
-    wavesurfer.on("seek", (position) => {
-      if (isWaveformClicked) {
-        videoPlayer.currentTime = position * videoPlayer.duration;
-      }
-      isWaveformClicked = false;
-    });
+//     wavesurfer.on("seek", (position) => {
+//       if (isWaveformClicked) {
+//         videoPlayer.currentTime = position * videoPlayer.duration;
+//       }
+//       isWaveformClicked = false;
+//     });
 
-    const waveform = wavesurfer.drawer.container;
+//     const waveform = wavesurfer.drawer.container;
 
-    waveform.addEventListener("mousedown", () => {
-      isWaveformClicked = true;
-    });
-  });
-}
+//     waveform.addEventListener("mousedown", () => {
+//       isWaveformClicked = true;
+//     });
+//   });
+// }
 
 // function playddddddemo(video_name, video, e) {
 //   $(document).ready(function () {
@@ -243,3 +256,143 @@ function playDemo(playerId, audio_folder, x, y) {
 //     }
 //   });
 // }
+
+function setupVideoWithWaveform(playerId, fileUrl, wavesurfer) {
+  wavesurfer = WaveSurfer.create({
+    container: `#waveform-original-${playerId}`,
+    waveColor: "blue",
+    progressColor: "green",
+    barWidth: 2,
+    height: 200,
+    backend: "WebAudio",
+  });
+
+  const videoPlayer = document.getElementById(`video-player-${playerId}`);
+  videoPlayer.muted = true;
+  let isPlaying = false;
+  let isWaveformClicked = false;
+
+  videoPlayer.addEventListener("click", () => {
+    if (isPlaying) {
+      videoPlayer.pause();
+      isPlaying = false;
+    } else {
+      videoPlayer.play();
+      isPlaying = true;
+    }
+  });
+
+  wavesurfer.on("ready", function () {
+    videoPlayer.addEventListener("play", () => {
+      wavesurfer.play();
+    });
+    videoPlayer.addEventListener("pause", () => {
+      wavesurfer.pause();
+    });
+
+    wavesurfer.on("seek", (position) => {
+      if (isWaveformClicked) {
+        videoPlayer.currentTime = position * videoPlayer.duration;
+      }
+      isWaveformClicked = false;
+    });
+
+    const waveform = wavesurfer.drawer.container;
+
+    waveform.addEventListener("mousedown", () => {
+      isWaveformClicked = true;
+    });
+  });
+
+  wavesurfer.load(fileUrl);
+
+  videoPlayer.addEventListener("timeupdate", () => {
+    const currentTime = videoPlayer.currentTime;
+    const duration = videoPlayer.duration;
+    const progressPercentage = currentTime / duration;
+    if (!isWaveformClicked) {
+      wavesurfer.seekTo(progressPercentage);
+    }
+  });
+}
+
+function interactiveDemo(playerId, audioFolder, blockSize, wavesurfer) {
+  const video = document.getElementById(`video-player-${playerId}`);
+  video.muted = true;
+  let isPlaying = false;
+  let gridWidth, gridHeight;
+  const highlightBox = document.createElement("div");
+  highlightBox.id = "highlight";
+  highlightBox.style.position = "absolute";
+  highlightBox.style.backgroundColor = "blue";
+  highlightBox.style.borderRadius = "5px";
+  highlightBox.style.opacity = "0.5";
+  highlightBox.style.pointerEvents = "none";
+
+  video.addEventListener("loadedmetadata", () => {
+    const block_width = Math.round(video.videoWidth / blockSize);
+    const block_height = Math.round(video.videoHeight / blockSize);
+    const ratioWidth = video.clientWidth / video.videoWidth;
+    const ratioHeight = video.clientHeight / video.videoHeight;
+    gridWidth = block_width * ratioWidth;
+    gridHeight = block_height * ratioHeight;
+  });
+
+  video.addEventListener("click", (event) => {
+    // Calculate the grid that was clicked
+    const x = Math.floor(event.offsetX / gridWidth);
+    const y = Math.floor(event.offsetY / gridHeight);
+    console.log(
+      `Clicked on pixel (${x}, ${y}) ${event.offsetX} ${event.offsetY} ${gridWidth} ${gridHeight} ${video.clientWidth} ${video.clientHeight}`
+    );
+
+    // Highlight the clicked grid cell
+    highlightBox.style.width = `${gridWidth}px`;
+    highlightBox.style.height = `${gridHeight}px`;
+    highlightBox.style.top = `${video.offsetTop + y * gridHeight}px`;
+    highlightBox.style.left = `${video.offsetLeft + x * gridWidth}px`;
+    video.parentElement.appendChild(highlightBox);
+
+    // Play the audio for the clicked grid cell
+    playDemo(playerId, audioFolder, x, y);
+  });
+
+  function playDemo(playerId, audio_folder, x, y) {
+    if (!wavesurfer) {
+      wavesurfer = WaveSurfer.create({
+        container: `#waveform-original-${playerId}`,
+        waveColor: "blue",
+        progressColor: "green",
+        barWidth: 2,
+        height: 200,
+        backend: "WebAudio",
+      });
+    }
+
+    let isWaveformClicked = false;
+    const base_path = "static/files/";
+    wave_file = `${base_path}${audio_folder}/wav/pred${x}-${y}_converted.wav`;
+
+    wavesurfer.empty();
+    wavesurfer.load(wave_file);
+    wavesurfer.on("ready", function () {
+      const videoPlayer = document.querySelector(`#video-player-${playerId}`);
+      videoPlayer.currentTime = 0;
+      videoPlayer.play();
+      wavesurfer.play();
+
+      wavesurfer.on("seek", (position) => {
+        if (isWaveformClicked) {
+          videoPlayer.currentTime = position * videoPlayer.duration;
+        }
+        isWaveformClicked = false;
+      });
+
+      const waveform = wavesurfer.drawer.container;
+
+      waveform.addEventListener("mousedown", () => {
+        isWaveformClicked = true;
+      });
+    });
+  }
+}

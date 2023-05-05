@@ -1,5 +1,4 @@
 from flask import Flask
-from flask_ngrok import run_with_ngrok
 from flask import render_template
 
 
@@ -28,4 +27,5 @@ def two_five_d():
 
 
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0', port=8787)
+    app.run(host='0.0.0.0')
+    # app.run(debug=True, host='0.0.0.0', port=8787)
