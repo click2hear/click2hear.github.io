@@ -371,7 +371,7 @@ function interactiveDemo(playerId, audioFolder, blockSize, wavesurfer) {
 
     let isWaveformClicked = false;
     const base_path = "static/files/";
-    wave_file = `${base_path}${audio_folder}/wav/pred${x}-${y}_converted.wav`;
+    wave_file = `${base_path}${audio_folder}/wav/pred${y}-${x}_converted.wav`;
 
     wavesurfer.empty();
     wavesurfer.load(wave_file);
